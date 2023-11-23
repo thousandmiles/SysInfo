@@ -2,8 +2,8 @@ CC = gcc
 CFLAGS = -Wall
 LIBNAME = libmylib.a
 
-INCDIRS := sysinfo/cpu sysinfo/disk sysinfo/memory sysinfo/process
-SRCDIRS := sysinfo/cpu sysinfo/disk sysinfo/memory sysinfo/process
+INCDIRS := ./inc
+SRCDIRS := ./src
 
 INCLUDE := $(patsubst %, -I%, $(INCDIRS))
 
