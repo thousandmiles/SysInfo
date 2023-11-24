@@ -38,7 +38,7 @@ Ptr_Process_Info create_process_info_node()
 
 /*
  * @brief   	: free the process info list
- * @param - ptr : the head node of linked list
+ * @param   ptr : the head node of linked list
  * @return 		: void
  */
 void free_process_info_list(Ptr_Process_Info ptr)
@@ -47,12 +47,6 @@ void free_process_info_list(Ptr_Process_Info ptr)
     {
         Ptr_Process_Info temp = ptr;
         ptr = ptr->next;
-
-        // free(temp->process_name);
-        // temp->process_name = NULL;
-
-        // free(temp->process_status);
-        // temp->process_status = NULL;
 
         free(temp);
         temp = NULL;
@@ -76,9 +70,11 @@ void print_process_info_list(Ptr_Process_Info ptr)
 }
 
 /*
- * @brief	    : obtain single attribute process info from /proc
- * @param  -file: [in] file pointer
- * @return 		: attribute
+ * @brief	      : obtain single attribute process info from /proc
+ * @param  f      : file pointer
+ * @param  flag   : attribute flag
+ * @param  result : attribute result
+ * @return 		  : attribute
  */
 void get_single_attribute(FILE *f, unsigned char flag, char *result)
 {
@@ -88,7 +84,7 @@ void get_single_attribute(FILE *f, unsigned char flag, char *result)
 
     if (file == NULL)
     {
-        return NULL;
+        return;
     }
 
     if (flag == PROCESS_NAME)
