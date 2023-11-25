@@ -20,7 +20,7 @@ typedef struct
     char vendor_id[128];
     char model_name[256];
     double cpu_mhz;
-    char cache_size[64];
+    unsigned int cache_size; // kB
     unsigned char core_num;
 } CPU_Info;
 
