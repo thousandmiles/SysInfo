@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <string.h>
 #include <sys/stat.h>
+#include "cpu.h"
 
 void test_process(void)
 {
@@ -28,9 +29,6 @@ Ptr_Process_Info create_process_info_node()
         strcpy(new_node->process_name, "");
         new_node->process_pid = 0;
         strcpy(new_node->process_status, "");
-        new_node->process_cpu_usage = 0;
-        new_node->process_disk_usage = 0;
-        new_node->process_memory_usage = 0;
         new_node->next = NULL;
     }
     return new_node;
@@ -63,8 +61,7 @@ void print_process_info_list(Ptr_Process_Info ptr)
     Ptr_Process_Info current = ptr;
     while (current != NULL)
     {
-        printf("Name: %s, PID: %u, Status: %s\n",
-               current->process_name, current->process_pid, current->process_status);
+        printf("Name: %s, PID: %u, Status: %s\n", current->process_name, current->process_pid, current->process_status);
         current = current->next;
     }
 }

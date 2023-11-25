@@ -13,9 +13,6 @@ typedef struct PROCESS_INFO
     char process_name[128];
     unsigned int process_pid;
     char process_status[128];
-    unsigned char process_cpu_usage;
-    unsigned char process_disk_usage;
-    unsigned char process_memory_usage;
     struct PROCESS_INFO *next;
 } Process_Info;
 
