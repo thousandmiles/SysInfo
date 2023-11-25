@@ -6,10 +6,16 @@
 
 int main(void)
 {
-    test_cpu();
-    test_disk();
-    test_memory();
     test_process();
+
+    printf("-------------------------------------------\n");
+    test_cpu();
+
+    printf("-------------------------------------------\n");
+    test_memory();
+
+    printf("-------------------------------------------\n");
+    test_disk();
 
     return 0;
 }
