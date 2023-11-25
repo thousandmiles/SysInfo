@@ -11,6 +11,7 @@ typedef struct
 
 typedef struct
 {
+    unsigned int pid;
     unsigned long utime;
     unsigned long stime;
 } Process_Stat;
@@ -23,8 +24,6 @@ typedef struct
     unsigned int cache_size; // kB
     unsigned char core_num;
 } CPU_Info;
-
-typedef CPU_Info *Ptr_CPU_Info;
 
 void test_cpu(void);
 
@@ -40,10 +39,10 @@ unsigned long calculate_process_cpu_time(const Process_Stat *process_stat);
 
 unsigned long get_total_process_time(unsigned int pid);
 
-double get_process_cpu_usage(unsigned int pid);
+float get_process_cpu_usage(unsigned int pid);
 
-void get_CPU_info(Ptr_CPU_Info cpu_info);
+void get_CPU_info(CPU_Info *cpu_info);
 
-void print_CPU_Info(Ptr_CPU_Info cpu_info);
+void print_CPU_Info(const CPU_Info *cpu_info);
 
 #endif
