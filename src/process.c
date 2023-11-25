@@ -67,58 +67,6 @@ void print_process_info_list(Ptr_Process_Info ptr)
 }
 
 /*
- * @brief	      : obtain single attribute process info from /proc
- * @param  f      : file pointer
- * @param  flag   : attribute flag
- * @param  result : attribute result
- * @return 		  : attribute
- */
-void get_single_attribute(FILE *f, unsigned char flag, char *result)
-{
-    char line[512];
-    const char *searchItem;
-    FILE *file = f;
-
-    if (file == NULL)
-    {
-        return;
-    }
-
-    if (flag == PROCESS_NAME)
-    {
-        searchItem = "Name:";
-    }
-    else if (flag == PROCESS_STATUS)
-    {
-        searchItem = "State:";
-    }
-    else
-    {
-        return;
-    }
-
-    while (fgets(line, sizeof(line), file) != NULL)
-    {
-        if (strstr(line, searchItem) != NULL)
-        {
-            fseek(file, -(long)strlen(line), SEEK_CUR);
-            break;
-        }
-    }
-
-    if (flag == PROCESS_NAME)
-    {
-        fscanf(file, "Name: %s", result);
-    }
-    else if (flag == PROCESS_STATUS)
-    {
-        fscanf(file, "State: %s", result);
-    }
-
-    return;
-}
-
-/*
  * @brief	    : obtain process info
  * @param       : void
  * @return 		: error code, 0 represents success
@@ -154,8 +102,21 @@ Ptr_Process_Info get_process_list()
                         Ptr_Process_Info newProcess = create_process_info_node();
                         newProcess->process_pid = pid;
 
-                        get_single_attribute(file, PROCESS_NAME, newProcess->process_name);
-                        get_single_attribute(file, PROCESS_STATUS, newProcess->process_status);
+                        char line[256];
+
+                        while (fgets(line, sizeof(line), file) != NULL)
+                        {
+
+                            if (strstr(line, "Name") != NULL)
+                            {
+                                sscanf(line, "Name: %[^\n]", newProcess->process_name);
+                            }
+                            else if (strstr(line, "State") != NULL)
+                            {
+                                sscanf(line, "State: %[^\n]", newProcess->process_status);
+                                break;
+                            }
+                        }
 
                         fclose(file);
 
@@ -167,6 +128,5 @@ Ptr_Process_Info get_process_list()
         }
         closedir(dir);
     }
-
     return head;
 }
