@@ -69,7 +69,7 @@ void print_process_info_list(Ptr_Process_Info ptr)
 /*
  * @brief	    : obtain process info
  * @param       : void
- * @return 		: error code, 0 represents success
+ * @return 		: the head node of process info list
  */
 Ptr_Process_Info get_process_list()
 {
