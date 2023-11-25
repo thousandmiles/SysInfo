@@ -171,7 +171,7 @@ void get_CPU_info(Ptr_CPU_Info cpu_info)
         }
         else if (strstr(line, "cache size") != NULL)
         {
-            sscanf(line, "cache size : %u %*s", &cpu_info->cache_size);
+            sscanf(line, "cache size : %u kB", &cpu_info->cache_size);
             break;
         }
     }
