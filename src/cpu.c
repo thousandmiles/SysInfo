@@ -89,6 +89,7 @@ void read_process_stat(unsigned int pid, Process_Stat *process_stat)
     sscanf(line, "%*d %*s %*c %*d %*d %*d %*d %*d %*u %*u %*u %*u %*u %lu %lu",
            &(process_stat->utime), &(process_stat->stime));
 
+    process_stat->pid = pid;
     fclose(stat_file);
     // printf("utime: %lu, stime: %lu \n", process_stat->utime, process_stat->stime);
 }
@@ -120,7 +121,7 @@ unsigned long get_total_process_time(unsigned int pid)
  * @param    pid    : process pid number
  * @return 		    : process cpu usage
  */
-double get_process_cpu_usage(unsigned int pid)
+float get_process_cpu_usage(unsigned int pid)
 {
     unsigned long total_cpu_time_1 = get_total_cpu_time();
     unsigned long total_process_time_1 = get_total_process_time(pid);
@@ -143,7 +144,7 @@ double get_process_cpu_usage(unsigned int pid)
  * @param   cpu_info: CPU_Info ptr
  * @return 		    : void
  */
-void get_CPU_info(Ptr_CPU_Info cpu_info)
+void get_CPU_info(CPU_Info *cpu_info)
 {
     FILE *file = fopen("/proc/cpuinfo", "r");
     if (file == NULL)
@@ -154,26 +155,22 @@ void get_CPU_info(Ptr_CPU_Info cpu_info)
 
     char line[256];
 
+    unsigned char process_num = 0;
+
     while (fgets(line, sizeof(line), file) != NULL)
     {
 
-        if (strstr(line, "vendor_id") != NULL)
+        sscanf(line, "processor : %hhu", &process_num);
+
+        if (process_num == 1)
         {
-            sscanf(line, "vendor_id : %[^\n]", cpu_info->vendor_id);
+            break; // every core is same, so we do't need others
         }
-        else if (strstr(line, "model name") != NULL)
-        {
-            sscanf(line, "model name : %[^\n]", cpu_info->model_name);
-        }
-        else if (strstr(line, "cpu MHz") != NULL)
-        {
-            sscanf(line, "cpu MHz : %lf", &cpu_info->cpu_mhz);
-        }
-        else if (strstr(line, "cache size") != NULL)
-        {
-            sscanf(line, "cache size : %u kB", &cpu_info->cache_size);
-            break;
-        }
+
+        sscanf(line, "vendor_id : %[^\n]", cpu_info->vendor_id);
+        sscanf(line, "model name : %[^\n]", cpu_info->model_name);
+        sscanf(line, "cpu MHz : %lf", &cpu_info->cpu_mhz);
+        sscanf(line, "cache size : %u kB", &cpu_info->cache_size);
     }
 
     cpu_info->core_num = sysconf(_SC_NPROCESSORS_ONLN);
@@ -184,7 +181,7 @@ void get_CPU_info(Ptr_CPU_Info cpu_info)
  * @param   cpu_info: CPU_Info ptr
  * @return 		    : void
  */
-void print_CPU_Info(Ptr_CPU_Info cpu_info)
+void print_CPU_Info(const CPU_Info *cpu_info)
 {
     printf("%s\n", cpu_info->vendor_id);
     printf("%s\n", cpu_info->model_name);
