@@ -171,7 +171,7 @@ void get_CPU_info(Ptr_CPU_Info cpu_info)
         }
         else if (strstr(line, "cache size") != NULL)
         {
-            sscanf(line, "cache size : %[^\n]", cpu_info->cache_size);
+            sscanf(line, "cache size : %u %*s", &cpu_info->cache_size);
             break;
         }
     }
@@ -189,6 +189,6 @@ void print_CPU_Info(Ptr_CPU_Info cpu_info)
     printf("%s\n", cpu_info->vendor_id);
     printf("%s\n", cpu_info->model_name);
     printf("%lf\n", cpu_info->cpu_mhz);
-    printf("%s\n", cpu_info->cache_size);
+    printf("%u\n", cpu_info->cache_size);
     printf("%u\n", cpu_info->core_num);
 }
