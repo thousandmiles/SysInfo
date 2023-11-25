@@ -106,14 +106,11 @@ Ptr_Process_Info get_process_list()
 
                         while (fgets(line, sizeof(line), file) != NULL)
                         {
+                            sscanf(line, "Name: %[^\n]", newProcess->process_name);
+                            sscanf(line, "State: %[^\n]", newProcess->process_status);
 
-                            if (strstr(line, "Name") != NULL)
+                            if (strlen(newProcess->process_name) > 0 && strlen(newProcess->process_status) > 0)
                             {
-                                sscanf(line, "Name: %[^\n]", newProcess->process_name);
-                            }
-                            else if (strstr(line, "State") != NULL)
-                            {
-                                sscanf(line, "State: %[^\n]", newProcess->process_status);
                                 break;
                             }
                         }
