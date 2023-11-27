@@ -44,4 +44,12 @@ Ptr_Disk_Info get_disk_list(void);
  */
 void print_disk_info_list(Disk_Info *head);
 
+/*
+ * @brief	     obtain disk info list
+ * @param        void
+ * @return 		 the json string of disk info list
+ * @note         [!!!] please clear the memory of the returned string after calling this function.
+ */
+char *get_disk_json_list(void);
+
 #endif
