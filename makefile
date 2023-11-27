@@ -1,6 +1,7 @@
 CC = gcc
 CFLAGS = -Wall
 LIBNAME = libmylib.a
+LIBS = -lmicrohttpd
 
 INCDIRS := ./inc
 SRCDIRS := ./src
@@ -21,7 +22,7 @@ $(OBJDIR)/%.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 testrun: $(OBJFILES)
-	$(CC) $(CFLAGS) $(INCLUDE) $^ -o $@
+	$(CC) $(CFLAGS) $(INCLUDE) $^ -o $@ $(LIBS)
 
 clean:
 	rm -rf $(OBJDIR)/* testrun
