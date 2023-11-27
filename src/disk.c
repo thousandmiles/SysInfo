@@ -145,7 +145,7 @@ char *get_disk_json_list(void)
 
     pclose(output);
 
-    char *out = cJSON_Print(root);
+    char *out = cJSON_PrintUnformatted(root);
 
     if (root)
     {
