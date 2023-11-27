@@ -78,4 +78,11 @@ int handle_get_disk_info_list(struct MHD_Connection *connection);
  */
 int handle_get_process_memory(unsigned int pid, struct MHD_Connection *connection);
 
+/*
+ * @brief response the machine memory info
+ * @param connection: MHD_Connection
+ * @return MHD_NO (0) on error (i.e. reply already sent), MHD_YES (1) on success or if message has been queued
+ */
+int handle_get_machine_memory_info_list(struct MHD_Connection *connection);
+
 #endif

@@ -47,6 +47,10 @@ int handle_GET_url(const char *url, struct MHD_Connection *connection)
     {
         return handle_get_disk_info_list(connection);
     }
+    else if (strcmp(url, "/machine-memory") == 0)
+    {
+        return handle_get_machine_memory_info_list(connection);
+    }
     else if (strncmp(url, "/process-total-time/", 20) == 0)
     {
         unsigned int pid;
@@ -167,6 +171,17 @@ int handle_get_disk_info_list(struct MHD_Connection *connection)
 int handle_get_process_memory(unsigned int pid, struct MHD_Connection *connection)
 {
     char *buffer = get_process_memory_json(pid);
+    struct MHD_Response *response = MHD_create_response_from_buffer(strlen(buffer), buffer, MHD_RESPMEM_MUST_COPY);
+    free(buffer);
+    int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+    MHD_destroy_response(response);
+
+    return ret;
+}
+
+int handle_get_machine_memory_info_list(struct MHD_Connection *connection)
+{
+    char *buffer = get_machine_memory_json();
     struct MHD_Response *response = MHD_create_response_from_buffer(strlen(buffer), buffer, MHD_RESPMEM_MUST_COPY);
     free(buffer);
     int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
