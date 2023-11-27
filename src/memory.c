@@ -16,12 +16,6 @@ void test_memory(void)
     printf("Process %u memory usage: %f \n", pid, get_process_memory_usage(pid));
 }
 
-/*
- * @brief	      : get process memory info
- * @param   pid   : process id
- * @param   info  : Process_Memory_Info ptr
- * @return 		  : void
- */
 void get_process_memory_info(unsigned int pid, Process_Memory_Info *info)
 {
     char filename[256];
@@ -58,11 +52,6 @@ void get_process_memory_info(unsigned int pid, Process_Memory_Info *info)
     return;
 }
 
-/*
- * @brief	      : print process memory info
- * @param   info  : Process_Memory_Info ptr
- * @return 		  : void
- */
 void print_process_memory_info(const Process_Memory_Info *info)
 {
     printf("Process %u memory information:\n", info->pid);
@@ -80,11 +69,6 @@ void print_process_memory_info(const Process_Memory_Info *info)
     printf("VmSwap: %lu kB\n", info->vm_swap);
 }
 
-/*
- * @brief	      : get machine memory info
- * @param   info  : Machine_Memory_Info ptr
- * @return 		  : void
- */
 void get_machine_memory_info(Machine_Memory_Info *info)
 {
     FILE *file = fopen("/proc/meminfo", "r");
@@ -107,11 +91,6 @@ void get_machine_memory_info(Machine_Memory_Info *info)
     fclose(file);
 }
 
-/*
- * @brief	      : print machine memory info
- * @param   info  : Machine_Memory_Info ptr
- * @return 		  : void
- */
 void print_machine_memory_info(const Machine_Memory_Info *info)
 {
     printf("Total Memory: %lu kB\n", info->total_memory);
@@ -121,11 +100,6 @@ void print_machine_memory_info(const Machine_Memory_Info *info)
     printf("Cached: %lu kB\n", info->cached);
 }
 
-/*
- * @brief	      : calculate process memory usage
- * @param   pid   : process id
- * @return 		  : memory usage (%)
- */
 float get_process_memory_usage(unsigned int pid)
 {
     float usage = 0.0;

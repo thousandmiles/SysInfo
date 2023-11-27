@@ -29,14 +29,40 @@ typedef struct
 
 void test_memory(void);
 
+/*
+ * @brief	       get process memory info
+ * @param   pid    process id
+ * @param   info   Process_Memory_Info ptr
+ * @return 		   void
+ */
 void get_process_memory_info(unsigned int pid, Process_Memory_Info *info);
 
+/*
+ * @brief	       print process memory info
+ * @param   info   Process_Memory_Info ptr
+ * @return 		   void
+ */
 void print_process_memory_info(const Process_Memory_Info *info);
 
+/*
+ * @brief	       get machine memory info
+ * @param   info   Machine_Memory_Info ptr
+ * @return 		   void
+ */
 void get_machine_memory_info(Machine_Memory_Info *info);
 
+/*
+ * @brief	       print machine memory info
+ * @param   info   Machine_Memory_Info ptr
+ * @return 		   void
+ */
 void print_machine_memory_info(const Machine_Memory_Info *info);
 
+/*
+ * @brief	       calculate process memory usage
+ * @param   pid    process id
+ * @return 		   memory usage (%)
+ */
 float get_process_memory_usage(unsigned int pid);
 
 #endif
