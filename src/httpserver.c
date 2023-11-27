@@ -7,6 +7,7 @@
 #include "cpu.h"
 #include "time.h"
 #include "process.h"
+#include "disk.h"
 
 int answer_to_connection(void *cls, struct MHD_Connection *connection,
                          const char *url,
@@ -40,6 +41,10 @@ int handle_GET_url(const char *url, struct MHD_Connection *connection)
     else if (strcmp(url, "/process-info") == 0)
     {
         return handle_get_process_info_list(connection);
+    }
+    else if (strcmp(url, "/disk-info") == 0)
+    {
+        return handle_get_disk_info_list(connection);
     }
     else if (strncmp(url, "/process-total-time/", 20) == 0)
     {
@@ -131,6 +136,18 @@ int handle_get_process_cpu_total_time(unsigned int pid, struct MHD_Connection *c
 int handle_get_process_info_list(struct MHD_Connection *connection)
 {
     char *buffer = get_process_json_list();
+    struct MHD_Response *response = MHD_create_response_from_buffer(strlen(buffer), buffer, MHD_RESPMEM_MUST_COPY);
+    int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+    MHD_destroy_response(response);
+
+    free(buffer);
+
+    return ret;
+}
+
+int handle_get_disk_info_list(struct MHD_Connection *connection)
+{
+    char *buffer = get_disk_json_list();
     struct MHD_Response *response = MHD_create_response_from_buffer(strlen(buffer), buffer, MHD_RESPMEM_MUST_COPY);
     int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
     MHD_destroy_response(response);
