@@ -107,3 +107,82 @@ Ptr_Process_Info get_process_list()
     }
     return head;
 }
+
+char *get_process_json_list(void)
+{
+    cJSON *root = cJSON_CreateObject();
+    cJSON *body = cJSON_CreateArray();
+
+    if (root == NULL || body == NULL)
+    {
+        return NULL;
+    }
+
+    cJSON_AddItemToObject(root, "process", body);
+
+    DIR *dir = opendir("/proc");
+    struct dirent *entry;
+
+    if (dir != NULL)
+    {
+        while ((entry = readdir(dir)) != NULL)
+        {
+            // Check if the entry is a directory
+            struct stat statbuf;
+            char path[512];
+            snprintf(path, sizeof(path), "/proc/%s", entry->d_name);
+
+            if (stat(path, &statbuf) == 0 && S_ISDIR(statbuf.st_mode))
+            {
+                // Check if the entry is a directory (process directories in /proc are named with numbers)
+                unsigned int pid = atoi(entry->d_name);
+                if (pid > 0)
+                {
+                    char filename[256];
+                    snprintf(filename, sizeof(filename), "/proc/%u/status", pid);
+
+                    FILE *file = fopen(filename, "r");
+
+                    if (file != NULL)
+                    {
+                        char process_name[128];
+                        char process_status[128];
+                        char line[256];
+
+                        memset(process_name, 0, sizeof(process_name));
+                        memset(process_status, 0, sizeof(process_status));
+
+                        while (fgets(line, sizeof(line), file) != NULL)
+                        {
+                            sscanf(line, "Name: %[^\n]", process_name);
+                            sscanf(line, "State: %[^\n]", process_status);
+
+                            if (strlen(process_name) > 0 && strlen(process_status) > 0)
+                            {
+                                break;
+                            }
+                        }
+
+                        cJSON *item = cJSON_CreateObject();
+                        cJSON_AddNumberToObject(item, "pid", pid);
+                        cJSON_AddStringToObject(item, "name", process_name);
+                        cJSON_AddStringToObject(item, "state", process_status);
+                        cJSON_AddItemToArray(body, item);
+
+                        fclose(file);
+                    }
+                }
+            }
+        }
+        closedir(dir);
+    }
+
+    char *out = cJSON_PrintUnformatted(root);
+
+    if (root)
+    {
+        cJSON_Delete(root);
+    }
+
+    return out;
+}

@@ -1,6 +1,7 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 #include "stdio.h"
+#include "cJSON.h"
 
 typedef struct PROCESS_INFO
 {
@@ -41,5 +42,13 @@ void free_process_info_list(Ptr_Process_Info ptr);
  * @return 		 void
  */
 void print_process_info_list(Ptr_Process_Info ptr);
+
+/*
+ * @brief	     obtain process info list
+ * @param        void
+ * @return 		 the json string of process info list
+ * @note         [!!!] please clear the memory of the returned string after calling this function.
+ */
+char *get_process_json_list(void);
 
 #endif
