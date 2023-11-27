@@ -1,13 +1,15 @@
 #include "memory.h"
 #include "stdio.h"
+#include "cJSON.h"
+#include <stdlib.h>
 
 void test_memory(void)
 {
     printf("Hello memory\r\n");
-    unsigned int pid = 43824;
-    Process_Memory_Info info;
-    get_process_memory_info(pid, &info);
-    print_process_memory_info(&info);
+    unsigned int pid = 150893;
+    char *res = get_process_memory_json(pid);
+    printf("%s\n", res);
+    free(res);
 
     Machine_Memory_Info minfo;
     get_machine_memory_info(&minfo);
@@ -50,6 +52,69 @@ void get_process_memory_info(unsigned int pid, Process_Memory_Info *info)
     info->pid = pid;
 
     return;
+}
+
+char *get_process_memory_json(unsigned int pid)
+{
+    cJSON *root = cJSON_CreateObject();
+    if (root == NULL)
+    {
+        return NULL;
+    }
+
+    char filename[256];
+    snprintf(filename, sizeof(filename), "/proc/%u/status", pid);
+
+    FILE *file = fopen(filename, "r");
+    if (file == NULL)
+    {
+        perror("Error opening status file");
+        return NULL;
+    }
+
+    char line[256];
+    Process_Memory_Info info;
+
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        sscanf(line, "VmPeak: %lu kB", &info.vm_peak);
+        sscanf(line, "VmSize: %lu kB", &info.vm_size);
+        sscanf(line, "VmLck: %lu kB", &info.vm_lck);
+        sscanf(line, "VmPin: %lu kB", &info.vm_pin);
+        sscanf(line, "VmHWM: %lu kB", &info.vm_hwm);
+        sscanf(line, "VmRSS: %lu kB", &info.vm_rss);
+        sscanf(line, "VmData: %lu kB", &info.vm_data);
+        sscanf(line, "VmStk: %lu kB", &info.vm_stk);
+        sscanf(line, "VmExe: %lu kB", &info.vm_exe);
+        sscanf(line, "VmLib: %lu kB", &info.vm_lib);
+        sscanf(line, "VmPTE: %lu kB", &info.vm_pte);
+        sscanf(line, "VmSwap: %lu kB", &info.vm_swap);
+    }
+
+    fclose(file);
+    info.pid = pid;
+
+    cJSON_AddNumberToObject(root, "vm_peak", info.vm_peak);
+    cJSON_AddNumberToObject(root, "vm_size", info.vm_size);
+    cJSON_AddNumberToObject(root, "vm_lck", info.vm_lck);
+    cJSON_AddNumberToObject(root, "vm_pin", info.vm_pin);
+    cJSON_AddNumberToObject(root, "vm_hwm", info.vm_hwm);
+    cJSON_AddNumberToObject(root, "vm_rss", info.vm_rss);
+    cJSON_AddNumberToObject(root, "vm_data", info.vm_data);
+    cJSON_AddNumberToObject(root, "vm_stk", info.vm_stk);
+    cJSON_AddNumberToObject(root, "vm_exe", info.vm_exe);
+    cJSON_AddNumberToObject(root, "vm_lib", info.vm_lib);
+    cJSON_AddNumberToObject(root, "vm_pte", info.vm_pte);
+    cJSON_AddNumberToObject(root, "vm_swap", info.vm_swap);
+
+    char *out = cJSON_PrintUnformatted(root);
+
+    if (root)
+    {
+        cJSON_Delete(root);
+    }
+
+    return out;
 }
 
 void print_process_memory_info(const Process_Memory_Info *info)

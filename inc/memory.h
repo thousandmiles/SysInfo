@@ -65,4 +65,12 @@ void print_machine_memory_info(const Machine_Memory_Info *info);
  */
 float get_process_memory_usage(unsigned int pid);
 
+/*
+ * @brief	     obtain process memory info json
+ * @param   pid  process id
+ * @return 		 the json string of process memory info
+ * @note         [!!!] please clear the memory of the returned string after calling this function.
+ */
+char *get_process_memory_json(unsigned int pid);
+
 #endif
