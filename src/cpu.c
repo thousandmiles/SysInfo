@@ -19,11 +19,6 @@ void test_cpu(void)
     print_CPU_Info(&info);
 }
 
-/*
- * @brief	        : obtain cpu stat info
- * @param   cpu_stat: CPU_Stat ptr
- * @return 		    : void
- */
 void read_cpu_stat(CPU_Stat *cpu_stat)
 {
     FILE *stat_file = fopen("/proc/stat", "r");
@@ -44,21 +39,11 @@ void read_cpu_stat(CPU_Stat *cpu_stat)
     // printf("user: %lu, nice: %lu, system: %lu, idle: %lu \n", (cpu_stat->user), (cpu_stat->nice), (cpu_stat->system), (cpu_stat->idle));
 }
 
-/*
- * @brief	        : calculate total cpu time
- * @param   cpu_stat: CPU_Stat ptr
- * @return 		    : total cpu time
- */
 unsigned long calculate_total_cpu_time(const CPU_Stat *cpu_stat)
 {
     return cpu_stat->user + cpu_stat->nice + cpu_stat->system + cpu_stat->idle;
 }
 
-/*
- * @brief	        : get total cpu time
- * @param           : void
- * @return 		    : total cpu time
- */
 unsigned long get_total_cpu_time()
 {
     CPU_Stat cpu_stat;
@@ -66,12 +51,6 @@ unsigned long get_total_cpu_time()
     return calculate_total_cpu_time(&cpu_stat);
 }
 
-/*
- * @brief	                : read process stat file
- * @param     pid           : process pid number
- * @param     process_stat  : Process_Stat ptr
- * @return 		            : total cpu time
- */
 void read_process_stat(unsigned int pid, Process_Stat *process_stat)
 {
     char stat_path[256];
@@ -94,21 +73,11 @@ void read_process_stat(unsigned int pid, Process_Stat *process_stat)
     // printf("utime: %lu, stime: %lu \n", process_stat->utime, process_stat->stime);
 }
 
-/*
- * @brief	            : calculate total cpu time
- * @param   process_stat: Process_Stat ptr
- * @return 		        : total cpu time of process
- */
 unsigned long calculate_process_cpu_time(const Process_Stat *process_stat)
 {
     return process_stat->utime + process_stat->stime;
 }
 
-/*
- * @brief	        : get total process time
- * @param    pid    : process pid number
- * @return 		    : total cpu time of process
- */
 unsigned long get_total_process_time(unsigned int pid)
 {
     Process_Stat process_stat;
@@ -116,11 +85,6 @@ unsigned long get_total_process_time(unsigned int pid)
     return calculate_process_cpu_time(&process_stat);
 }
 
-/*
- * @brief	        : get process cpu usage
- * @param    pid    : process pid number
- * @return 		    : process cpu usage
- */
 float get_process_cpu_usage(unsigned int pid)
 {
     unsigned long total_cpu_time_1 = get_total_cpu_time();
@@ -139,11 +103,6 @@ float get_process_cpu_usage(unsigned int pid)
     return ((double)(total_process_time_2 - total_process_time_1) / (double)(total_cpu_time_2 - total_cpu_time_1)) * 100.0;
 }
 
-/*
- * @brief	        : get cpu info
- * @param   cpu_info: CPU_Info ptr
- * @return 		    : void
- */
 void get_CPU_info(CPU_Info *cpu_info)
 {
     FILE *file = fopen("/proc/cpuinfo", "r");
@@ -176,11 +135,6 @@ void get_CPU_info(CPU_Info *cpu_info)
     cpu_info->core_num = sysconf(_SC_NPROCESSORS_ONLN);
 }
 
-/*
- * @brief	        : print cpu info
- * @param   cpu_info: CPU_Info ptr
- * @return 		    : void
- */
 void print_CPU_Info(const CPU_Info *cpu_info)
 {
     printf("%s\n", cpu_info->vendor_id);
