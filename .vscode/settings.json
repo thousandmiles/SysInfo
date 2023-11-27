@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "cpu.h": "c",
-        "microhttpd.h": "c"
+        "microhttpd.h": "c",
+        "string.h": "c"
     }
 }
