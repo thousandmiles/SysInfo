@@ -56,4 +56,10 @@ int handle_get_cpu_total_time(struct MHD_Connection *connection);
  */
 int handle_get_process_cpu_total_time(unsigned int pid, struct MHD_Connection *connection);
 
+/*
+ * @brief response the process info
+ * @param connection: MHD_Connection
+ * @return MHD_NO (0) on error (i.e. reply already sent), MHD_YES (1) on success or if message has been queued
+ */
+int handle_get_process_info_list(struct MHD_Connection *connection);
 #endif
