@@ -13,11 +13,6 @@ void test_process(void)
     free_process_info_list(ptr);
 }
 
-/*
- * @brief   	: create a process info node
- * @param       : void
- * @return 		: a node ptr
- */
 Ptr_Process_Info create_process_info_node()
 {
     Ptr_Process_Info new_node = (Ptr_Process_Info)malloc(sizeof(Process_Info));
@@ -34,11 +29,6 @@ Ptr_Process_Info create_process_info_node()
     return new_node;
 }
 
-/*
- * @brief   	: free the process info list
- * @param   ptr : the head node of linked list
- * @return 		: void
- */
 void free_process_info_list(Ptr_Process_Info ptr)
 {
     while (ptr != NULL)
@@ -51,11 +41,6 @@ void free_process_info_list(Ptr_Process_Info ptr)
     }
 }
 
-/*
- * @brief   	: print the process info list to stdout
- * @param - ptr : the head node of linked list
- * @return 		: void
- */
 void print_process_info_list(Ptr_Process_Info ptr)
 {
     Ptr_Process_Info current = ptr;
@@ -66,11 +51,6 @@ void print_process_info_list(Ptr_Process_Info ptr)
     }
 }
 
-/*
- * @brief	    : obtain process info
- * @param       : void
- * @return 		: the head node of process info list
- */
 Ptr_Process_Info get_process_list()
 {
     Ptr_Process_Info head = NULL;
