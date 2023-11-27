@@ -8,6 +8,7 @@
 #include "time.h"
 #include "process.h"
 #include "disk.h"
+#include "memory.h"
 
 int answer_to_connection(void *cls, struct MHD_Connection *connection,
                          const char *url,
@@ -52,6 +53,14 @@ int handle_GET_url(const char *url, struct MHD_Connection *connection)
         if (sscanf(url + 20, "%u", &pid) == 1)
         {
             return handle_get_process_cpu_total_time(pid, connection);
+        }
+    }
+    else if (strncmp(url, "/process-memory/", 16) == 0)
+    {
+        unsigned int pid;
+        if (sscanf(url + 16, "%u", &pid) == 1)
+        {
+            return handle_get_process_memory(pid, connection);
         }
     }
 
@@ -137,10 +146,9 @@ int handle_get_process_info_list(struct MHD_Connection *connection)
 {
     char *buffer = get_process_json_list();
     struct MHD_Response *response = MHD_create_response_from_buffer(strlen(buffer), buffer, MHD_RESPMEM_MUST_COPY);
+    free(buffer);
     int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
     MHD_destroy_response(response);
-
-    free(buffer);
 
     return ret;
 }
@@ -149,10 +157,20 @@ int handle_get_disk_info_list(struct MHD_Connection *connection)
 {
     char *buffer = get_disk_json_list();
     struct MHD_Response *response = MHD_create_response_from_buffer(strlen(buffer), buffer, MHD_RESPMEM_MUST_COPY);
+    free(buffer);
     int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
     MHD_destroy_response(response);
 
+    return ret;
+}
+
+int handle_get_process_memory(unsigned int pid, struct MHD_Connection *connection)
+{
+    char *buffer = get_process_memory_json(pid);
+    struct MHD_Response *response = MHD_create_response_from_buffer(strlen(buffer), buffer, MHD_RESPMEM_MUST_COPY);
     free(buffer);
+    int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+    MHD_destroy_response(response);
 
     return ret;
 }
