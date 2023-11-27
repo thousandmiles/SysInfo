@@ -10,11 +10,6 @@ void test_disk(void)
     print_disk_info_list(head);
 }
 
-/*
- * @brief   	: create a disk info node
- * @param       : void
- * @return 		: a node ptr
- */
 Ptr_Disk_Info create_disk_node(void)
 {
     Disk_Info *disk_info = (Disk_Info *)malloc(sizeof(Disk_Info));
@@ -31,11 +26,6 @@ Ptr_Disk_Info create_disk_node(void)
     return disk_info;
 }
 
-/*
- * @brief   	: free the disk info list
- * @param   ptr : the head node of linked list
- * @return 		: void
- */
 void free_disk_node(Disk_Info *head)
 {
     Disk_Info *current = head;
@@ -49,11 +39,6 @@ void free_disk_node(Disk_Info *head)
     }
 }
 
-/*
- * @brief	    : obtain disk info
- * @param       : void
- * @return 		: the head node of disk info list
- */
 Ptr_Disk_Info get_disk_list(void)
 {
     char line[512];
@@ -90,11 +75,6 @@ Ptr_Disk_Info get_disk_list(void)
     return head;
 }
 
-/*
- * @brief   	: print the disk info list to stdout
- * @param - ptr : the head node of linked list
- * @return 		: void
- */
 void print_disk_info_list(Disk_Info *head)
 {
     Disk_Info *current = head;
