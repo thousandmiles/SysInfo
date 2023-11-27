@@ -62,37 +62,8 @@ char *get_process_memory_json(unsigned int pid)
         return NULL;
     }
 
-    char filename[256];
-    snprintf(filename, sizeof(filename), "/proc/%u/status", pid);
-
-    FILE *file = fopen(filename, "r");
-    if (file == NULL)
-    {
-        perror("Error opening status file");
-        return NULL;
-    }
-
-    char line[256];
     Process_Memory_Info info;
-
-    while (fgets(line, sizeof(line), file) != NULL)
-    {
-        sscanf(line, "VmPeak: %lu kB", &info.vm_peak);
-        sscanf(line, "VmSize: %lu kB", &info.vm_size);
-        sscanf(line, "VmLck: %lu kB", &info.vm_lck);
-        sscanf(line, "VmPin: %lu kB", &info.vm_pin);
-        sscanf(line, "VmHWM: %lu kB", &info.vm_hwm);
-        sscanf(line, "VmRSS: %lu kB", &info.vm_rss);
-        sscanf(line, "VmData: %lu kB", &info.vm_data);
-        sscanf(line, "VmStk: %lu kB", &info.vm_stk);
-        sscanf(line, "VmExe: %lu kB", &info.vm_exe);
-        sscanf(line, "VmLib: %lu kB", &info.vm_lib);
-        sscanf(line, "VmPTE: %lu kB", &info.vm_pte);
-        sscanf(line, "VmSwap: %lu kB", &info.vm_swap);
-    }
-
-    fclose(file);
-    info.pid = pid;
+    get_process_memory_info(pid, &info);
 
     cJSON_AddNumberToObject(root, "vm_peak", info.vm_peak);
     cJSON_AddNumberToObject(root, "vm_size", info.vm_size);
@@ -154,6 +125,33 @@ void get_machine_memory_info(Machine_Memory_Info *info)
     }
 
     fclose(file);
+}
+
+char *get_machine_memory_json(void)
+{
+    cJSON *root = cJSON_CreateObject();
+    if (root == NULL)
+    {
+        return NULL;
+    }
+
+    Machine_Memory_Info minfo;
+    get_machine_memory_info(&minfo);
+
+    cJSON_AddNumberToObject(root, "total_memory", minfo.total_memory);
+    cJSON_AddNumberToObject(root, "free_memory", minfo.free_memory);
+    cJSON_AddNumberToObject(root, "available_memory", minfo.available_memory);
+    cJSON_AddNumberToObject(root, "buffers", minfo.buffers);
+    cJSON_AddNumberToObject(root, "cached", minfo.cached);
+
+    char *out = cJSON_PrintUnformatted(root);
+
+    if (root)
+    {
+        cJSON_Delete(root);
+    }
+
+    return out;
 }
 
 void print_machine_memory_info(const Machine_Memory_Info *info)

@@ -73,4 +73,11 @@ float get_process_memory_usage(unsigned int pid);
  */
 char *get_process_memory_json(unsigned int pid);
 
+/*
+ * @brief	     obtain machine memory info json
+ * @param        void
+ * @return 		 the json string of machine memory info
+ * @note         [!!!] please clear the memory of the returned string after calling this function.
+ */
+char *get_machine_memory_json(void);
 #endif
