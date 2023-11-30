@@ -10,19 +10,19 @@ INCLUDE := $(patsubst %, -I%, $(INCDIRS))
 
 OBJDIR = ./obj
 
-CFILES := $(wildcard $(addsuffix /*.c, $(SRCDIRS))) test/main.c
+CFILES := $(wildcard $(addsuffix /*.c, $(SRCDIRS))) run/main.c
 OBJFILES := $(patsubst %.c, $(OBJDIR)/%.o, $(CFILES))
 
-.PHONY: all clean testrun
+.PHONY: all clean CrossNex
 
-all: testrun
+all: CrossNex
 
 $(OBJDIR)/%.o: %.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
-testrun: $(OBJFILES)
+CrossNex: $(OBJFILES)
 	$(CC) $(CFLAGS) $(INCLUDE) $^ -o $@ $(LIBS)
 
 clean:
-	rm -rf $(OBJDIR)/* testrun
+	rm -rf $(OBJDIR)/* CrossNex
