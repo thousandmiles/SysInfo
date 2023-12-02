@@ -29,6 +29,12 @@ static struct MHD_Daemon *my_daemon = NULL;
 
 int run_default(void)
 {
+    printf("default running...\n");
+    return run();
+}
+
+int run(void)
+{
     my_daemon = MHD_start_daemon(MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL,
                                  &answer_to_connection, NULL, MHD_OPTION_END);
     if (NULL == my_daemon)
@@ -36,8 +42,6 @@ int run_default(void)
         perror("my_daemon failed");
         exit(EXIT_FAILURE);
     }
-
-    printf("default running...\n");
 
     signal(SIGINT, handle_signal);
     signal(SIGTERM, handle_signal);
@@ -116,5 +120,5 @@ void run_background(void)
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
 
-    run_default();
+    run();
 }

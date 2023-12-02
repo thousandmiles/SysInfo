@@ -9,6 +9,13 @@
 void show_help(void);
 
 /*
+ * @brief	run the service
+ * @param   void
+ * @return 	success (0) or error (1)
+ */
+int run(void);
+
+/*
  * @brief	run the service by default
  * @param   void
  * @return 	success (0) or error (1)
