@@ -1,5 +1,6 @@
 #include "command.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <microhttpd.h>
 #include "httpserver.h"
 
@@ -25,18 +26,71 @@ void show_help(void)
 
 int run_default(void)
 {
-    struct MHD_Daemon *daemon;
+    struct MHD_Daemon *my_daemon;
 
-    daemon = MHD_start_daemon(MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL,
-                              &answer_to_connection, NULL, MHD_OPTION_END);
-    if (NULL == daemon)
+    my_daemon = MHD_start_daemon(MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL,
+                                 &answer_to_connection, NULL, MHD_OPTION_END);
+    if (NULL == my_daemon)
     {
-        perror("daemon failed!");
-        return 1;
+        perror("my_daemon failed!");
+        exit(EXIT_FAILURE);
     }
 
-    getchar();
+    printf("default running...\n");
 
-    MHD_stop_daemon(daemon);
+    while (1)
+    {
+    };
+
+    MHD_stop_daemon(my_daemon);
     return 0;
+}
+
+void stop_service(void)
+{
+    const char *process_name = "CrossNex";
+    char command[512];
+
+    snprintf(command, sizeof(command), "pkill %s", process_name);
+
+    if (system(command) == -1)
+    {
+        printf("%s can't be stopped, please try again.\n", process_name);
+        exit(EXIT_FAILURE);
+    }
+}
+
+void run_background(void)
+{
+    pid_t pid = fork();
+
+    if (pid == -1)
+    {
+        perror("fork background process failed");
+        exit(EXIT_FAILURE);
+    }
+    else if (pid > 0)
+    {
+        exit(EXIT_SUCCESS);
+    }
+
+    if (setsid() == -1)
+    {
+        perror("setsid failed");
+        exit(EXIT_FAILURE);
+    }
+
+    if (chdir("/") == -1)
+    {
+        perror("chdir failed");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("background running...\n");
+
+    close(STDIN_FILENO);
+    close(STDOUT_FILENO);
+    close(STDERR_FILENO);
+
+    run_default();
 }
