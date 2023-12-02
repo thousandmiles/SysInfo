@@ -4,7 +4,8 @@
         "microhttpd.h": "c",
         "string.h": "c",
         "unistd.h": "c",
-        "getopt_posix.h": "c"
+        "getopt_posix.h": "c",
+        "stdio.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }
