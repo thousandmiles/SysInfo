@@ -1,14 +1,9 @@
-#include "cpu.h"
-#include "disk.h"
-#include "memory.h"
-#include "process.h"
 #include "stdio.h"
-#include "httpserver.h"
 #include <unistd.h>
-#include <microhttpd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "command.h"
 
 extern int optind, opterr, optopt;
 extern char *optarg;
@@ -57,7 +52,7 @@ int main(int argc, char *argv[])
     {
         if (run_in_background && !debug_mode)
         {
-            printf("background running... \n");
+            run_background();
         }
         else if (run_in_background && debug_mode)
         {
@@ -69,13 +64,12 @@ int main(int argc, char *argv[])
         }
         else
         {
-            printf("default running...\n");
+            run_default();
         }
     }
     else if (strcmp(action, "stop") == 0)
     {
-        printf("stop running...\n");
-    }
+        }
     else if (strcmp(action, "add") == 0)
     {
         if (username != NULL && password != NULL)
@@ -102,39 +96,12 @@ int main(int argc, char *argv[])
     }
     else if (strcmp(action, "help") == 0)
     {
-        printf("help page ...\n");
+        show_help();
     }
     else
     {
         fprintf(stderr, "undefined paramaters: %s\n", action);
         return EXIT_FAILURE;
     }
-    return 0;
-
-    // test_process();
-
-    // printf("-------------------------------------------\n");
-    // test_cpu();
-
-    // printf("-------------------------------------------\n");
-    // test_memory();
-
-    // printf("-------------------------------------------\n");
-    // test_disk();
-
-    struct MHD_Daemon *daemon;
-
-    daemon = MHD_start_daemon(MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL,
-                              &answer_to_connection, NULL, MHD_OPTION_END);
-    if (NULL == daemon)
-    {
-        perror("daemon failed!");
-        return 1;
-    }
-
-    getchar();
-
-    MHD_stop_daemon(daemon);
-
     return 0;
 }
