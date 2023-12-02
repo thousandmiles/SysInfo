@@ -31,6 +31,7 @@ int answer_to_connection(void *cls, struct MHD_Connection *connection,
 
 int handle_GET_url(const char *url, struct MHD_Connection *connection)
 {
+    printf("%s\n", url);
     if (strcmp(url, "/cpu-info") == 0)
     {
         return handle_get_cpu_info(connection);
