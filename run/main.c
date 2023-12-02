@@ -8,13 +8,15 @@
 extern int optind, opterr, optopt;
 extern char *optarg;
 
+char *ip_address = NULL;
+
 int main(int argc, char *argv[])
 {
 
     int opt;
     char *username = NULL;
     char *password = NULL;
-    char *ip_address = NULL;
+
     int run_in_background = 0;
     int debug_mode = 0;
 
@@ -60,7 +62,7 @@ int main(int argc, char *argv[])
         }
         else if (!run_in_background && debug_mode)
         {
-            printf("debug running...\n");
+            run();
         }
         else
         {
