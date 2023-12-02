@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "command.h"
+#include "user.h"
 
 extern int optind, opterr, optopt;
 extern char *optarg;
@@ -77,7 +78,7 @@ int main(int argc, char *argv[])
     {
         if (username != NULL && password != NULL)
         {
-            printf("add users: %s, password: %s\n", username, password);
+            add_user(username, password);
         }
         else
         {
@@ -89,7 +90,7 @@ int main(int argc, char *argv[])
     {
         if (username != NULL)
         {
-            printf("delete user: %s\n", username);
+            delete_user(username);
         }
         else
         {
