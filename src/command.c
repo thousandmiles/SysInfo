@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <microhttpd.h>
 #include "httpserver.h"
+#include <signal.h>
 
 void show_help(void)
 {
@@ -24,25 +25,35 @@ void show_help(void)
     printf("@e-mail: \tlongxy98@foxmail.com\n");
 }
 
+static struct MHD_Daemon *my_daemon = NULL;
+
 int run_default(void)
 {
-    struct MHD_Daemon *my_daemon;
+    // struct MHD_Daemon *my_daemon;
 
     my_daemon = MHD_start_daemon(MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL,
                                  &answer_to_connection, NULL, MHD_OPTION_END);
     if (NULL == my_daemon)
     {
-        perror("my_daemon failed!");
+        perror("my_daemon failed");
         exit(EXIT_FAILURE);
     }
 
     printf("default running...\n");
 
+    // getchar();
+
+    // printf("exit safely\n");
+
+    // MHD_stop_daemon(my_daemon);
+
+    signal(SIGINT, handle_signal);
+    signal(SIGTERM, handle_signal);
+
     while (1)
     {
     };
 
-    MHD_stop_daemon(my_daemon);
     return 0;
 }
 
@@ -55,8 +66,29 @@ void stop_service(void)
 
     if (system(command) == -1)
     {
-        printf("%s can't be stopped, please try again.\n", process_name);
+        printf("%s can't be stopped, please try again\n", process_name);
         exit(EXIT_FAILURE);
+    }
+}
+
+void cleanup_and_exit()
+{
+
+    if (my_daemon != NULL)
+    {
+        printf("resource release...\n");
+        MHD_stop_daemon(my_daemon);
+    }
+
+    printf("exit safely\n");
+    exit(EXIT_SUCCESS);
+}
+
+void handle_signal(int signum)
+{
+    if (signum == SIGINT || signum == SIGTERM)
+    {
+        cleanup_and_exit();
     }
 }
 

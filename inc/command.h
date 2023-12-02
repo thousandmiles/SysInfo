@@ -38,17 +38,31 @@ void run_debug(char *ip);
 
 /*
  * @brief	add a authorized user
- * @param   username valid user name
- * @param   password valid password
+ * @param   username    valid user name
+ * @param   password    valid password
  * @return 	success (0) or error (1)
  */
 int add_user(char *username, char *password);
 
 /*
  * @brief	delete a authorized user
- * @param   username valid user name
+ * @param   username    valid user name
  * @return 	success (0) or error (1)
  */
 int delete_user(char *username);
+
+/*
+ * @brief	clean up
+ * @param   void
+ * @return 	void
+ */
+void cleanup_and_exit();
+
+/*
+ * @brief	processing the received signal
+ * @param   signum      the received signal
+ * @return 	void
+ */
+void handle_signal(int signum);
 
 #endif
