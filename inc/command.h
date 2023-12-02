@@ -11,9 +11,9 @@ void show_help(void);
 /*
  * @brief	run the service by default
  * @param   void
- * @return 	void
+ * @return 	success (0) or error (1)
  */
-void run_default(void);
+int run_default(void);
 
 /*
  * @brief	stop the service

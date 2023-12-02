@@ -1,5 +1,7 @@
 #include "command.h"
 #include <stdio.h>
+#include <microhttpd.h>
+#include "httpserver.h"
 
 void show_help(void)
 {
@@ -19,4 +21,22 @@ void show_help(void)
     printf("For any questions, please feel free to contact me: \n");
     printf("@Github: \thttps://github.com/thousandmiles\n");
     printf("@e-mail: \tlongxy98@foxmail.com\n");
+}
+
+int run_default(void)
+{
+    struct MHD_Daemon *daemon;
+
+    daemon = MHD_start_daemon(MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL,
+                              &answer_to_connection, NULL, MHD_OPTION_END);
+    if (NULL == daemon)
+    {
+        perror("daemon failed!");
+        return 1;
+    }
+
+    getchar();
+
+    MHD_stop_daemon(daemon);
+    return 0;
 }
