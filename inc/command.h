@@ -44,21 +44,6 @@ void run_background(void);
 void run_debug(char *ip);
 
 /*
- * @brief	add a authorized user
- * @param   username    valid user name
- * @param   password    valid password
- * @return 	success (0) or error (1)
- */
-int add_user(char *username, char *password);
-
-/*
- * @brief	delete a authorized user
- * @param   username    valid user name
- * @return 	success (0) or error (1)
- */
-int delete_user(char *username);
-
-/*
  * @brief	clean up
  * @param   void
  * @return 	void
