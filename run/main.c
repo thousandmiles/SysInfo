@@ -69,7 +69,8 @@ int main(int argc, char *argv[])
     }
     else if (strcmp(action, "stop") == 0)
     {
-        }
+        stop_service();
+    }
     else if (strcmp(action, "add") == 0)
     {
         if (username != NULL && password != NULL)
