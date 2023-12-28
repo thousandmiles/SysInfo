@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
         }
         else if (!run_in_background && debug_mode)
         {
+            printf("debug running: %s\n", ip_address);
             run();
         }
         else
