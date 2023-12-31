@@ -35,7 +35,7 @@ void test_memory(void);
  * @param   info   Process_Memory_Info ptr
  * @return 		   void
  */
-void get_process_memory_info(unsigned int pid, Process_Memory_Info *info);
+int get_process_memory_info(unsigned int pid, Process_Memory_Info *info);
 
 /*
  * @brief	       print process memory info

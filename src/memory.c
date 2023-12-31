@@ -18,7 +18,7 @@ void test_memory(void)
     printf("Process %u memory usage: %f \n", pid, get_process_memory_usage(pid));
 }
 
-void get_process_memory_info(unsigned int pid, Process_Memory_Info *info)
+int get_process_memory_info(unsigned int pid, Process_Memory_Info *info)
 {
     char filename[256];
     snprintf(filename, sizeof(filename), "/proc/%u/status", pid);
@@ -27,7 +27,7 @@ void get_process_memory_info(unsigned int pid, Process_Memory_Info *info)
     if (file == NULL)
     {
         perror("Error opening status file");
-        return;
+        return 1;
     }
 
     char line[256];
@@ -51,7 +51,7 @@ void get_process_memory_info(unsigned int pid, Process_Memory_Info *info)
     fclose(file);
     info->pid = pid;
 
-    return;
+    return 0;
 }
 
 char *get_process_memory_json(unsigned int pid)
@@ -63,20 +63,36 @@ char *get_process_memory_json(unsigned int pid)
     }
 
     Process_Memory_Info info;
-    get_process_memory_info(pid, &info);
-
-    cJSON_AddNumberToObject(root, "vm_peak", info.vm_peak);
-    cJSON_AddNumberToObject(root, "vm_size", info.vm_size);
-    cJSON_AddNumberToObject(root, "vm_lck", info.vm_lck);
-    cJSON_AddNumberToObject(root, "vm_pin", info.vm_pin);
-    cJSON_AddNumberToObject(root, "vm_hwm", info.vm_hwm);
-    cJSON_AddNumberToObject(root, "vm_rss", info.vm_rss);
-    cJSON_AddNumberToObject(root, "vm_data", info.vm_data);
-    cJSON_AddNumberToObject(root, "vm_stk", info.vm_stk);
-    cJSON_AddNumberToObject(root, "vm_exe", info.vm_exe);
-    cJSON_AddNumberToObject(root, "vm_lib", info.vm_lib);
-    cJSON_AddNumberToObject(root, "vm_pte", info.vm_pte);
-    cJSON_AddNumberToObject(root, "vm_swap", info.vm_swap);
+    if (get_process_memory_info(pid, &info) == 0)
+    {
+        cJSON_AddNumberToObject(root, "vm_peak", info.vm_peak);
+        cJSON_AddNumberToObject(root, "vm_size", info.vm_size);
+        cJSON_AddNumberToObject(root, "vm_lck", info.vm_lck);
+        cJSON_AddNumberToObject(root, "vm_pin", info.vm_pin);
+        cJSON_AddNumberToObject(root, "vm_hwm", info.vm_hwm);
+        cJSON_AddNumberToObject(root, "vm_rss", info.vm_rss);
+        cJSON_AddNumberToObject(root, "vm_data", info.vm_data);
+        cJSON_AddNumberToObject(root, "vm_stk", info.vm_stk);
+        cJSON_AddNumberToObject(root, "vm_exe", info.vm_exe);
+        cJSON_AddNumberToObject(root, "vm_lib", info.vm_lib);
+        cJSON_AddNumberToObject(root, "vm_pte", info.vm_pte);
+        cJSON_AddNumberToObject(root, "vm_swap", info.vm_swap);
+    }
+    else
+    {
+        cJSON_AddNumberToObject(root, "vm_peak", 0);
+        cJSON_AddNumberToObject(root, "vm_size", 0);
+        cJSON_AddNumberToObject(root, "vm_lck", 0);
+        cJSON_AddNumberToObject(root, "vm_pin", 0);
+        cJSON_AddNumberToObject(root, "vm_hwm", 0);
+        cJSON_AddNumberToObject(root, "vm_rss", 0);
+        cJSON_AddNumberToObject(root, "vm_data", 0);
+        cJSON_AddNumberToObject(root, "vm_stk", 0);
+        cJSON_AddNumberToObject(root, "vm_exe", 0);
+        cJSON_AddNumberToObject(root, "vm_lib", 0);
+        cJSON_AddNumberToObject(root, "vm_pte", 0);
+        cJSON_AddNumberToObject(root, "vm_swap", 0);
+    }
 
     char *out = cJSON_PrintUnformatted(root);
 
