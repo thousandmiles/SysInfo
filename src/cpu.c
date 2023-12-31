@@ -59,6 +59,10 @@ void read_process_stat(unsigned int pid, Process_Stat *process_stat)
     if (stat_file == NULL)
     {
         perror("Error opening /proc/[pid]/stat");
+
+        process_stat->utime = 0;
+        process_stat->stime = 0;
+        process_stat->pid = pid;
         return;
     }
 
