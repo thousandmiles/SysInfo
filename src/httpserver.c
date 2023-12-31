@@ -121,14 +121,14 @@ int handle_get_cpu_info(struct MHD_Connection *connection)
 
 int handle_get_cpu_total_time(struct MHD_Connection *connection)
 {
-    time_t current_time;
-    time(&current_time);
-    struct tm *local_time = localtime(&current_time);
+    // time_t current_time;
+    // time(&current_time);
+    // struct tm *local_time = localtime(&current_time);
 
     unsigned long total_cpu_time = get_total_cpu_time();
-    const char *response_json = "{\"current_time\": \"%s\", \"total_cpu_time\": %u}";
+    const char *response_json = "{\"total_cpu_time\": %u}";
     char buffer[128];
-    snprintf(buffer, sizeof(buffer), response_json, asctime(local_time), total_cpu_time);
+    snprintf(buffer, sizeof(buffer), response_json, total_cpu_time);
 
     struct MHD_Response *response = MHD_create_response_from_buffer(strlen(buffer), buffer, MHD_RESPMEM_MUST_COPY);
     int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
@@ -139,14 +139,14 @@ int handle_get_cpu_total_time(struct MHD_Connection *connection)
 
 int handle_get_process_cpu_total_time(unsigned int pid, struct MHD_Connection *connection)
 {
-    time_t current_time;
-    time(&current_time);
-    struct tm *local_time = localtime(&current_time);
+    // time_t current_time;
+    // time(&current_time);
+    // struct tm *local_time = localtime(&current_time);
 
     unsigned long total_process_time = get_total_process_time(pid);
-    const char *response_json = "{\"pid\": %u, \"current_time\": \"%s\", \"total_cpu_time\": %u}";
+    const char *response_json = "{\"pid\": %u, \"total_cpu_time\": %u}";
     char buffer[128];
-    snprintf(buffer, sizeof(buffer), response_json, pid, asctime(local_time), total_process_time);
+    snprintf(buffer, sizeof(buffer), response_json, pid, total_process_time);
 
     struct MHD_Response *response = MHD_create_response_from_buffer(strlen(buffer), buffer, MHD_RESPMEM_MUST_COPY);
     int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
