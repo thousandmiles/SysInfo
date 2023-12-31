@@ -108,7 +108,7 @@ int handle_get_cpu_info(struct MHD_Connection *connection)
 
     CPU_Info info;
     get_CPU_info(&info);
-    const char *response_json = "{\"vendor_id\": %s, \"model_name\": %s, \"cpu_mhz\": %lf, \"cache_size\": %u, \"core_num\": %hu}";
+    const char *response_json = "{\"vendor_id\": \"%s\", \"model_name\": \"%s\", \"cpu_mhz\": %lf, \"cache_size\": %u, \"core_num\": %hu}";
     char buffer[512];
     snprintf(buffer, sizeof(buffer), response_json, info.vendor_id, info.model_name, info.cpu_mhz, info.cache_size, info.core_num);
 
